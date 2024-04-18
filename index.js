@@ -65,7 +65,7 @@ const rl = readline.createInterface({
 (async () => {
   rl.question('ketik 1 untuk dafar, ketik 2 untuk valid, ketik 3 jika anda ingin masuk islam: ', async (answer) => {
     if(answer == 1) {
-      const reff = "RG1hzC7sYwsY";
+      const reff = "fBBnyb-QuoKQ";
       const processCount = Math.floor(numOfCpus / 2);
       await startThread(reff, processCount);
     }else if (answer == 2) {
