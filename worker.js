@@ -1,5 +1,6 @@
 const { parentPort } = require("worker_threads");
 const axios = require("axios");
+const _fs = require("fs").promises;
 const fs = require("fs");
 
 class Logger {
@@ -49,6 +50,9 @@ async function registerUser(
 
   try {
     const response = await axios.post(url, payload, { headers });
+
+   
+    
     return response.data;
   } catch (error) {
     return null;
@@ -153,35 +157,35 @@ parentPort.on("message", async (data) => {
     return;
   }
   logger.log(`User registered successfully. Getting inbox id...`);
-  const inboxId = await getInboxId(email, logger);
-  if (!inboxId) {
-    parentPort.postMessage(`Failed to get inbox id for ${email}. Skipping...`);
-    return;
-  }
+  // const inboxId = await getInboxId(email, logger);
+  // if (!inboxId) {
+  //   parentPort.postMessage(`Failed to get inbox id for ${email}. Skipping...`);
+  //   return;
+  // }
 
-  logger.log(`Got inbox id ${inboxId}. Getting verify code...`);
-  const message = await getMessage(email, inboxId);
-  if (!message) {
-    parentPort.postMessage(`Failed to get message for ${email}. Skipping...`);
-    return;
-  }
+  // logger.log(`Got inbox id ${inboxId}. Getting verify code...`);
+  // const message = await getMessage(email, inboxId);
+  // if (!message) {
+  //   parentPort.postMessage(`Failed to get message for ${email}. Skipping...`);
+  //   return;
+  // }
 
-  const links = extractLinksFromHtml(message);
-  const verifyCode = extractVerifyLink(links, email);
-  if (!verifyCode) {
-    parentPort.postMessage(
-      `Failed to get verify code for ${email}. Skipping...`
-    );
-    return;
-  }
-  logger.log(`Got verify code ${verifyCode}. Verifying user...`);
+  // const links = extractLinksFromHtml(message);
+  // const verifyCode = extractVerifyLink(links, email);
+  // if (!verifyCode) {
+  //   parentPort.postMessage(
+  //     `Failed to get verify code for ${email}. Skipping...`
+  //   );
+  //   return;
+  // }
+  // logger.log(`Got verify code ${verifyCode}. Verifying user...`);
 
-  const verifyResponse = await verifyUser(verifyCode);
-  if (!verifyResponse) {
-    parentPort.postMessage(`Failed to verify user ${email}. Skipping...`);
-    return;
-  }
+  // const verifyResponse = await verifyUser(verifyCode);
+  // if (!verifyResponse) {
+  //   parentPort.postMessage(`Failed to verify user ${email}. Skipping...`);
+  //   return;
+  // }
 
-  logger.log(`User verified successfully.`);
+  // logger.log(`User verified successfully.`);
   parentPort.postMessage(`done`);
 });
